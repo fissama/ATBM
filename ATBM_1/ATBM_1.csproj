@@ -51,12 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionString.cs" />
-    <Compile Include="DangNhap.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DangNhap.Designer.cs">
-      <DependentUpon>DangNhap.cs</DependentUpon>
-    </Compile>
     <Compile Include="QuanLyBenhVien.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,9 +59,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DangNhap.resx">
-      <DependentUpon>DangNhap.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="QuanLyBenhVien.resx">
       <DependentUpon>QuanLyBenhVien.cs</DependentUpon>
     </EmbeddedResource>
@@ -93,9 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Image\BenhVienC.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Image\BenhVienC1.jpg" />

@@ -24,7 +24,7 @@ namespace ATBM_1
         private void DanhSachUser()
         {
             OracleConnection con_ds = new OracleConnection();
-            con_ds.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con_ds.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             DataSet dataSet_ds = new DataSet();
             OracleCommand cmd_ds;
             if (timkiemuserroletb.Text == "")
@@ -81,7 +81,7 @@ namespace ATBM_1
         private void ThongTinQuyen()
         {
             OracleConnection con_ttq = new OracleConnection();
-            con_ttq.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con_ttq.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
             DataSet dataSet_ttq = new DataSet();
             OracleCommand cmd_ttq;
@@ -114,12 +114,12 @@ namespace ATBM_1
                 thongtinupdatedg.DataSource = dataTable;
             }
             con_ttq.Close();
-        }
+        } 
         private void Admin_Load(object sender, EventArgs e)
         {
             DanhSachUser();
             ThongTinQuyen();
-
+            ThongTinTableView();
         }
 
 
@@ -131,7 +131,7 @@ namespace ATBM_1
                 return;
             }
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             /*OracleCommand cmd = con.CreateCommand();
             cmd.CommandText = "alter session set \"_ORACLE_SCRIPT\"=true;";
@@ -166,7 +166,7 @@ namespace ATBM_1
                 return;
             }
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             if (CheckRole(RoleNameTB.Text.ToUpper()) == 0)
             {
@@ -191,7 +191,36 @@ namespace ATBM_1
             con.Close();
 
         }
-
+        
+        private int IdNhanVien(int stt, String loai)
+        {
+            OracleConnection con = new OracleConnection();
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
+            con.Open();
+            OracleCommand cmd = con.CreateCommand();
+            cmd.CommandText = "select * from bv.loai_nv where tenloai = '" + loai + "'";
+            OracleDataReader dr = cmd.ExecuteReader();
+            String idL = "";
+            DataTable dataTable = new DataTable();
+            dataTable.Load(dr);
+            foreach (DataRow el in dataTable.Rows)
+            {
+                idL = el[0].ToString();
+            }
+            cmd.CommandText = "Select * from bv.nhan_vien where loainv = '" + idL + "'";
+            dr = cmd.ExecuteReader();
+            DataTable dataTable2 = new DataTable();
+            dataTable2.Load(dr);
+            int count = 0;
+            foreach (DataRow el in dataTable2.Rows)
+            {
+                if (count + 1 == stt)
+                    return (Convert.ToInt32(el[0].ToString()));
+                count++;
+            }
+            con.Close();
+            return 0;
+        }
         private void taouserbtn_Click(object sender, EventArgs e)
         {
             if (tendangnhaptb.Text == "" || matkhautb.Text == "")
@@ -200,7 +229,7 @@ namespace ATBM_1
                 return;
             }
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             if (CheckRole(tendangnhaptb.Text.ToUpper()) == 0 && CheckUser(tendangnhaptb.Text.ToUpper()) == 0)
             {
@@ -213,11 +242,26 @@ namespace ATBM_1
                 cmd_themrole.CommandText = "create user " + tendangnhaptb.Text.ToUpper() + " identified by " + matkhautb.Text;
                 cmd_themrole.CommandType = CommandType.Text;
                 cmd_themrole.ExecuteNonQuery();
+                string b = string.Empty;
+                string c = string.Empty;
+                int stt = 0;
 
+                for (int i = 0; i < tendangnhaptb.Text.Length; i++)
+                {
+                    if (Char.IsDigit(tendangnhaptb.Text[i]))
+                        b += tendangnhaptb.Text[i];
+                    else c += tendangnhaptb.Text[i];
+                }
+                c = c.ToUpper();
+                if (b.Length > 0)
+                    stt = int.Parse(b);
                 //cấp quyền connect cho user 
                 OracleCommand cmd_connect = new OracleCommand();
                 cmd_connect.Connection = con;
                 cmd_connect.CommandText = "grant connect to " + tendangnhaptb.Text.ToUpper();
+                cmd_connect.CommandType = CommandType.Text;
+                cmd_connect.ExecuteNonQuery();
+                cmd_connect.CommandText = "UPDATE BV.NHAN_VIEN SET USERNAME = '" + tendangnhaptb.Text.ToUpper() + "' WHERE MANV = '" + this.IdNhanVien(stt, c).ToString()+"'"; ;
                 cmd_connect.CommandType = CommandType.Text;
                 cmd_connect.ExecuteNonQuery();
                 //load lại danh sách user
@@ -240,7 +284,7 @@ namespace ATBM_1
                 return;
             }
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             if (CheckUser(tendangnhaptb.Text.ToUpper()) == 0)
             {
@@ -274,7 +318,7 @@ namespace ATBM_1
                 return;
             }
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             if (CheckUser(tendangnhaptb.Text.ToUpper()) == 0)
             {
@@ -303,7 +347,7 @@ namespace ATBM_1
                 return;
             }
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             if (CheckRole(caproletb.Text.ToUpper()) == 0 && CheckUser(chousertb.Text.ToUpper()) == 0)
             {
@@ -325,7 +369,7 @@ namespace ATBM_1
         private int CheckView(string viewname)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             OracleCommand cmd_checkview = new OracleCommand();
             cmd_checkview.Connection = con;
@@ -340,7 +384,7 @@ namespace ATBM_1
         private int CheckRole(string rolename)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             OracleCommand cmd_checkrole = new OracleCommand();
             cmd_checkrole.Connection = con;
@@ -357,7 +401,7 @@ namespace ATBM_1
         {
             username = username.ToUpper();
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             OracleCommand cmd_checkuser = new OracleCommand();
             cmd_checkuser.Connection = con;
@@ -372,7 +416,7 @@ namespace ATBM_1
         private void btnINSERTgrt_Click(object sender, EventArgs e)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             if (capquyenrolerb.Checked)
             {
                 if (CheckRole(tenuserroletb.Text.ToUpper()) == 0)
@@ -440,7 +484,7 @@ namespace ATBM_1
         private void btnDELETEgrt_Click(object sender, EventArgs e)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
             if (capquyenrolerb.Checked)
             {
@@ -498,7 +542,7 @@ namespace ATBM_1
         private void btnSELECTgrt_Click(object sender, EventArgs e)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
             if (capquyenrolerb.Checked)
             {
@@ -634,7 +678,7 @@ namespace ATBM_1
         private void btnUPDATEgrt_Click(object sender, EventArgs e)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
             if (capquyenrolerb.Checked)
             {
@@ -743,7 +787,7 @@ namespace ATBM_1
         private int CheckPrivilege(string tablename, string privilege, string grantee)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
 
             if (privilege != "UPDATE")
@@ -782,7 +826,7 @@ namespace ATBM_1
         private void Revoke(string tablename, string privilege, string grantee)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             OracleCommand cmd_revoke = new OracleCommand();
             cmd_revoke.Connection = con;
@@ -794,7 +838,7 @@ namespace ATBM_1
         private void btnDELETErvk_Click(object sender, EventArgs e)
         {
             //OracleConnection con = new OracleConnection();
-            //con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            //con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             if (thuquyenrolerb.Checked)
             {
                 if (CheckRole(tenuserrolethutb.Text.ToUpper()) == 0)
@@ -1075,7 +1119,7 @@ namespace ATBM_1
         private void button2_Click(object sender, EventArgs e)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
             con.Open();
             OracleCommand cmd = new OracleCommand();
             cmd.Connection = con;
@@ -1096,7 +1140,7 @@ namespace ATBM_1
         private void viewAudit_Click(object sender, EventArgs e)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
             con.Open();
             OracleCommand cmd = new OracleCommand();
@@ -1108,13 +1152,21 @@ namespace ATBM_1
                 dataTable.Load(reader);
                 AuditGD.DataSource = dataTable;
             }
+            cmd = new OracleCommand("Select unified_audit_policies,event_Timestamp,dbUsername,Action_Name,object_schema,object_name,Sql_Text,Return_code from unified_Audit_Trail", con);
+
+            using (OracleDataReader reader = cmd.ExecuteReader())
+            {
+                DataTable dataTable = new DataTable();
+                dataTable.Load(reader);
+                AuditViewPoliGD.DataSource = dataTable;
+            }
             con.Close();
         }
 
         private void turnOffAudit_Click(object sender, EventArgs e)
         {
             OracleConnection con = new OracleConnection();
-            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+            con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
             con.Open();
             OracleCommand cmd = new OracleCommand();
@@ -1134,7 +1186,7 @@ namespace ATBM_1
             else
             {
                 OracleConnection con = new OracleConnection();
-                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
                 con.Open();
                 OracleCommand cmd = new OracleCommand();
@@ -1145,6 +1197,14 @@ namespace ATBM_1
                     DataTable dataTable = new DataTable();
                     dataTable.Load(reader);
                     AuditGD.DataSource = dataTable;
+                }
+                cmd = new OracleCommand("Select unified_audit_policies,event_Timestamp,dbUsername,Action_Name,object_schema,object_name,Sql_Text,Return_code from unified_Audit_Trail where dbUsername = '" + viewAuditUserTB.Text.ToUpper() + "'", con);
+
+                using (OracleDataReader reader = cmd.ExecuteReader())
+                {
+                    DataTable dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    AuditViewPoliGD.DataSource = dataTable;
                 }
                 con.Close();
             }
@@ -1159,7 +1219,7 @@ namespace ATBM_1
             else
             {
                 OracleConnection con = new OracleConnection();
-                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
                 con.Open();
                 OracleCommand cmd = new OracleCommand();
                 cmd.Connection = con;
@@ -1183,7 +1243,7 @@ namespace ATBM_1
             else
             {
                 OracleConnection con = new OracleConnection();
-                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
                 con.Open();
                 OracleCommand cmd = new OracleCommand();
@@ -1201,7 +1261,7 @@ namespace ATBM_1
                             audit = audit + item[i];
                         }
                     }
-                    audit += " ON BV.benh_nhan";
+                    audit += " ON BV.benh_nhan by access";
                     if (AuditMode.Items.Count == 1)
                     {
                         for (int i = 0; i < AuditMode.Items.Count; i++)
@@ -1229,7 +1289,7 @@ namespace ATBM_1
                             audit = audit + item[i];
                         }
                     }
-                    audit += " ON BV.PHIEU_KHAM";
+                    audit += " ON BV.PHIEU_KHAM by access";
                     if (AuditMode.Items.Count == 1)
                     {
                         for (int i = 0; i < AuditMode.Items.Count; i++)
@@ -1260,14 +1320,14 @@ namespace ATBM_1
             else
             {
                 OracleConnection con = new OracleConnection();
-                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
                 con.Open();
                 OracleCommand cmd = new OracleCommand();
                 cmd.Connection = con;
                 cmd.CommandText = "alter system set audit_trail = db, extended scope = spfile";
                 cmd.CommandType = CommandType.Text;
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "noaudit all by " + UserAudit.Text;
+                cmd.CommandText = "noaudit all by " + UserAudit.Text ;
                 cmd.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Tắt ghi nhật ký thành công!");
@@ -1283,7 +1343,7 @@ namespace ATBM_1
             else
             {
                 OracleConnection con = new OracleConnection();
-                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
                 con.Open();
                 OracleCommand cmd = new OracleCommand();
@@ -1356,7 +1416,7 @@ namespace ATBM_1
             if(viewBNrb.Checked ==true)
             {
                 OracleConnection con = new OracleConnection();
-                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
                 con.Open();
                 OracleCommand cmd = new OracleCommand();
@@ -1368,12 +1428,21 @@ namespace ATBM_1
                     dataTable.Load(reader);
                     AuditGD.DataSource = dataTable;
                 }
+                cmd = new OracleCommand("Select unified_audit_policies,event_Timestamp,dbUsername,Action_Name,object_schema,object_name,Sql_Text,Return_code from unified_Audit_Trail where object_name = 'BENH_NHAN'", con);
+
+                using (OracleDataReader reader = cmd.ExecuteReader())
+                {
+                    DataTable dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    AuditViewPoliGD.DataSource = dataTable;
+                }
+                con.Close();
                 con.Close();
             }
             else
             {
                 OracleConnection con = new OracleConnection();
-                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-E7O6VVM)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = XE)));User Id=system;Password=161299";
+                con.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
 
                 con.Open();
                 OracleCommand cmd = new OracleCommand();
@@ -1384,6 +1453,14 @@ namespace ATBM_1
                     DataTable dataTable = new DataTable();
                     dataTable.Load(reader);
                     AuditGD.DataSource = dataTable;
+                }
+                cmd = new OracleCommand("Select unified_audit_policies,event_Timestamp,dbUsername,Action_Name,object_schema,object_name,Sql_Text,Return_code from unified_Audit_Trail where object_name = 'PHIEU_KHAM'", con);
+
+                using (OracleDataReader reader = cmd.ExecuteReader())
+                {
+                    DataTable dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    AuditViewPoliGD.DataSource = dataTable;
                 }
                 con.Close();
             }
@@ -1397,6 +1474,82 @@ namespace ATBM_1
         private void viewPKrb_CheckedChanged(object sender, EventArgs e)
         {
             button4.Visible = true;
+        }
+
+        private void ThongTinTableView()
+        {
+            OracleConnection con_ttq = new OracleConnection();
+            con_ttq.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
+
+            OracleCommand cmd_tb;
+            if (tableSearchTB.Text == "")
+                cmd_tb = new OracleCommand("SELECT owner, table_name FROM all_tables ", con_ttq);
+            else
+                cmd_tb = new OracleCommand("SELECT owner, table_name FROM all_tables  where table_name = '" + tableSearchTB.Text.ToUpper() + "'", con_ttq);
+            cmd_tb.CommandType = CommandType.Text;
+            con_ttq.Open();
+            using (OracleDataReader dr = cmd_tb.ExecuteReader())
+            {
+                DataTable dataTable = new DataTable();
+                dataTable.Load(dr);
+                TableDG.DataSource = dataTable;
+            }
+
+            OracleCommand cmd_v;
+            if (viewSearchTB.Text == "")
+                cmd_v = new OracleCommand("SELECT owner, view_name FROM all_views where rownum <= 50", con_ttq);
+            else
+                cmd_v = new OracleCommand("SELECT owner, view_name FROM all_views where view_name = '" + viewSearchTB.Text.ToUpper() + "'", con_ttq);
+
+            using (OracleDataReader dr = cmd_v.ExecuteReader())
+            {
+                DataTable dataTable = new DataTable();
+                dataTable.Load(dr);
+                ViewDG.DataSource = dataTable;
+            }
+            con_ttq.Close();
+        }
+
+        private void searchTableB_Click(object sender, EventArgs e)
+        {
+            OracleConnection con_ttq = new OracleConnection();
+            con_ttq.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
+
+            DataSet dataSet_ttq = new DataSet();
+            OracleCommand cmd_tb1;
+            if (tableSearchTB.Text == "")
+                cmd_tb1 = new OracleCommand("SELECT owner, table_name FROM all_tables ", con_ttq);
+            else
+                cmd_tb1 = new OracleCommand("SELECT owner, table_name FROM all_tables  where table_name = '" + tableSearchTB.Text.ToUpper() + "'", con_ttq);
+            cmd_tb1.CommandType = CommandType.Text;
+            con_ttq.Open();
+            using (OracleDataReader reader = cmd_tb1.ExecuteReader())
+            {
+                DataTable dataTable = new DataTable();
+                dataTable.Load(reader);
+                TableDG.DataSource = dataTable;
+            }
+        }
+
+        private void button2_Click_2(object sender, EventArgs e)
+        {
+            OracleConnection con_ttq = new OracleConnection();
+            con_ttq.ConnectionString = @"Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = ORCL)));User Id=system;Password=161299";
+            con_ttq.Open();
+            DataSet dataSet_ttq = new DataSet();
+            OracleCommand cmd_v1;
+            if (viewSearchTB.Text == "")
+                cmd_v1 = new OracleCommand("SELECT owner, view_name FROM all_views", con_ttq);
+            else
+                cmd_v1 = new OracleCommand("SELECT owner, view_name FROM all_views where view_name = '" + viewSearchTB.Text.ToUpper() + "'", con_ttq);
+
+            using (OracleDataReader reader = cmd_v1.ExecuteReader())
+            {
+                DataTable dataTable = new DataTable();
+                dataTable.Load(reader);
+                ViewDG.DataSource = dataTable;
+            }
+            con_ttq.Close();
         }
     }
 }

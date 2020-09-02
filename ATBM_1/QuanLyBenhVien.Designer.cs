@@ -1,4 +1,6 @@
-﻿namespace ATBM_1
+﻿using System.Windows.Forms;
+
+namespace ATBM_1
 {
     partial class QuanLyBenhVien
     {
@@ -132,6 +134,16 @@
             this.turnOffAudit = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.turnOnAudit = new System.Windows.Forms.Button();
+            this.Table_View = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
+            this.searchTableB = new System.Windows.Forms.Button();
+            this.viewSearchTB = new System.Windows.Forms.TextBox();
+            this.tableSearchTB = new System.Windows.Forms.TextBox();
+            this.viewView = new System.Windows.Forms.Label();
+            this.tableView = new System.Windows.Forms.Label();
+            this.ViewDG = new System.Windows.Forms.DataGridView();
+            this.TableDG = new System.Windows.Forms.DataGridView();
+            this.AuditViewPoliGD = new System.Windows.Forms.DataGridView();
             this.TabChoose.SuspendLayout();
             this.InfoUser.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.danhsachuserroledg)).BeginInit();
@@ -157,6 +169,10 @@
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AuditGD)).BeginInit();
             this.AuditGB.SuspendLayout();
+            this.Table_View.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ViewDG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TableDG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AuditViewPoliGD)).BeginInit();
             this.SuspendLayout();
             // 
             // TabChoose
@@ -167,6 +183,7 @@
             this.TabChoose.Controls.Add(this.GrantPrivi);
             this.TabChoose.Controls.Add(this.RevoPrivi);
             this.TabChoose.Controls.Add(this.AuditTab);
+            this.TabChoose.Controls.Add(this.Table_View);
             this.TabChoose.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TabChoose.Location = new System.Drawing.Point(12, 12);
             this.TabChoose.Name = "TabChoose";
@@ -228,9 +245,13 @@
             // 
             // danhsachuserroledg
             // 
+            this.danhsachuserroledg.AllowUserToAddRows = false;
+            this.danhsachuserroledg.AllowUserToDeleteRows = false;
+            this.danhsachuserroledg.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.danhsachuserroledg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.danhsachuserroledg.Location = new System.Drawing.Point(495, 125);
             this.danhsachuserroledg.Name = "danhsachuserroledg";
+            this.danhsachuserroledg.ReadOnly = true;
             this.danhsachuserroledg.Size = new System.Drawing.Size(734, 663);
             this.danhsachuserroledg.TabIndex = 5;
             // 
@@ -268,17 +289,25 @@
             // 
             // danhsachroledg
             // 
+            this.danhsachroledg.AllowUserToAddRows = false;
+            this.danhsachroledg.AllowUserToDeleteRows = false;
+            this.danhsachroledg.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.danhsachroledg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.danhsachroledg.Location = new System.Drawing.Point(14, 505);
             this.danhsachroledg.Name = "danhsachroledg";
+            this.danhsachroledg.ReadOnly = true;
             this.danhsachroledg.Size = new System.Drawing.Size(443, 283);
             this.danhsachroledg.TabIndex = 1;
             // 
             // danhsachuserdg
             // 
+            this.danhsachuserdg.AllowUserToAddRows = false;
+            this.danhsachuserdg.AllowUserToDeleteRows = false;
+            this.danhsachuserdg.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.danhsachuserdg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.danhsachuserdg.Location = new System.Drawing.Point(14, 125);
             this.danhsachuserdg.Name = "danhsachuserdg";
+            this.danhsachuserdg.ReadOnly = true;
             this.danhsachuserdg.Size = new System.Drawing.Size(443, 338);
             this.danhsachuserdg.TabIndex = 0;
             // 
@@ -356,17 +385,25 @@
             // 
             // thongtinupdatedg
             // 
+            this.thongtinupdatedg.AllowUserToAddRows = false;
+            this.thongtinupdatedg.AllowUserToDeleteRows = false;
+            this.thongtinupdatedg.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.thongtinupdatedg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.thongtinupdatedg.Location = new System.Drawing.Point(21, 527);
+            this.thongtinupdatedg.Location = new System.Drawing.Point(24, 527);
             this.thongtinupdatedg.Name = "thongtinupdatedg";
+            this.thongtinupdatedg.ReadOnly = true;
             this.thongtinupdatedg.Size = new System.Drawing.Size(1200, 271);
             this.thongtinupdatedg.TabIndex = 1;
             // 
             // thongtinquyendg
             // 
+            this.thongtinquyendg.AllowUserToAddRows = false;
+            this.thongtinquyendg.AllowUserToDeleteRows = false;
+            this.thongtinquyendg.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.thongtinquyendg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.thongtinquyendg.Location = new System.Drawing.Point(21, 85);
             this.thongtinquyendg.Name = "thongtinquyendg";
+            this.thongtinquyendg.ReadOnly = true;
             this.thongtinquyendg.Size = new System.Drawing.Size(1200, 386);
             this.thongtinquyendg.TabIndex = 0;
             // 
@@ -724,7 +761,7 @@
             // wgoPKcb
             // 
             this.wgoPKcb.AutoSize = true;
-            this.wgoPKcb.Location = new System.Drawing.Point(226, 252);
+            this.wgoPKcb.Location = new System.Drawing.Point(226, 301);
             this.wgoPKcb.Name = "wgoPKcb";
             this.wgoPKcb.Size = new System.Drawing.Size(149, 24);
             this.wgoPKcb.TabIndex = 20;
@@ -734,7 +771,7 @@
             // wgoBNcb
             // 
             this.wgoBNcb.AutoSize = true;
-            this.wgoBNcb.Location = new System.Drawing.Point(34, 252);
+            this.wgoBNcb.Location = new System.Drawing.Point(34, 301);
             this.wgoBNcb.Name = "wgoBNcb";
             this.wgoBNcb.Size = new System.Drawing.Size(149, 24);
             this.wgoBNcb.TabIndex = 19;
@@ -763,7 +800,7 @@
             "MABN"});
             this.PHIEUKHAMgrt.Location = new System.Drawing.Point(226, 137);
             this.PHIEUKHAMgrt.Name = "PHIEUKHAMgrt";
-            this.PHIEUKHAMgrt.Size = new System.Drawing.Size(149, 109);
+            this.PHIEUKHAMgrt.Size = new System.Drawing.Size(149, 151);
             this.PHIEUKHAMgrt.TabIndex = 11;
             // 
             // BENHNHANgrt
@@ -779,7 +816,7 @@
             "CMND"});
             this.BENHNHANgrt.Location = new System.Drawing.Point(34, 137);
             this.BENHNHANgrt.Name = "BENHNHANgrt";
-            this.BENHNHANgrt.Size = new System.Drawing.Size(149, 109);
+            this.BENHNHANgrt.Size = new System.Drawing.Size(149, 151);
             this.BENHNHANgrt.TabIndex = 10;
             // 
             // tenuserrolelbl
@@ -1062,6 +1099,7 @@
             // groupBox3
             // 
             this.groupBox3.BackColor = System.Drawing.Color.LemonChiffon;
+            this.groupBox3.Controls.Add(this.AuditViewPoliGD);
             this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Controls.Add(this.panel3);
             this.groupBox3.Controls.Add(this.button3);
@@ -1170,14 +1208,19 @@
             // 
             // AuditGD
             // 
+            this.AuditGD.AllowUserToAddRows = false;
+            this.AuditGD.AllowUserToDeleteRows = false;
+            this.AuditGD.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.AuditGD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.AuditGD.Location = new System.Drawing.Point(19, 113);
             this.AuditGD.Name = "AuditGD";
-            this.AuditGD.Size = new System.Drawing.Size(1138, 426);
+            this.AuditGD.ReadOnly = true;
+            this.AuditGD.Size = new System.Drawing.Size(1138, 184);
             this.AuditGD.TabIndex = 2;
             // 
             // AuditGB
             // 
+            this.AuditViewPoliGD.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.AuditGB.BackColor = System.Drawing.Color.LemonChiffon;
             this.AuditGB.Controls.Add(this.TurnOffAuditTableB);
             this.AuditGB.Controls.Add(this.TurnOffAuditUserB);
@@ -1392,6 +1435,117 @@
             this.turnOnAudit.UseVisualStyleBackColor = false;
             this.turnOnAudit.Click += new System.EventHandler(this.button2_Click);
             // 
+            // Table_View
+            // 
+            this.Table_View.BackColor = System.Drawing.Color.Ivory;
+            this.Table_View.Controls.Add(this.button2);
+            this.Table_View.Controls.Add(this.searchTableB);
+            this.Table_View.Controls.Add(this.viewSearchTB);
+            this.Table_View.Controls.Add(this.tableSearchTB);
+            this.Table_View.Controls.Add(this.viewView);
+            this.Table_View.Controls.Add(this.tableView);
+            this.Table_View.Controls.Add(this.ViewDG);
+            this.Table_View.Controls.Add(this.TableDG);
+            this.Table_View.Location = new System.Drawing.Point(4, 29);
+            this.Table_View.Name = "Table_View";
+            this.Table_View.Padding = new System.Windows.Forms.Padding(3);
+            this.Table_View.Size = new System.Drawing.Size(1244, 804);
+            this.Table_View.TabIndex = 6;
+            this.Table_View.Text = "Xem table & view";
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.PaleGreen;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.ForeColor = System.Drawing.Color.DarkGreen;
+            this.button2.Location = new System.Drawing.Point(996, 407);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(216, 30);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "Tìm kiếm";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click_2);
+            // 
+            // searchTableB
+            // 
+            this.searchTableB.BackColor = System.Drawing.Color.PaleGreen;
+            this.searchTableB.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.searchTableB.ForeColor = System.Drawing.Color.DarkGreen;
+            this.searchTableB.Location = new System.Drawing.Point(996, 22);
+            this.searchTableB.Name = "searchTableB";
+            this.searchTableB.Size = new System.Drawing.Size(216, 30);
+            this.searchTableB.TabIndex = 6;
+            this.searchTableB.Text = "Tìm kiếm";
+            this.searchTableB.UseVisualStyleBackColor = false;
+            this.searchTableB.Click += new System.EventHandler(this.searchTableB_Click);
+            // 
+            // viewSearchTB
+            // 
+            this.viewSearchTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.viewSearchTB.Location = new System.Drawing.Point(116, 407);
+            this.viewSearchTB.Name = "viewSearchTB";
+            this.viewSearchTB.Size = new System.Drawing.Size(873, 30);
+            this.viewSearchTB.TabIndex = 5;
+            // 
+            // tableSearchTB
+            // 
+            this.tableSearchTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tableSearchTB.Location = new System.Drawing.Point(116, 22);
+            this.tableSearchTB.Name = "tableSearchTB";
+            this.tableSearchTB.Size = new System.Drawing.Size(873, 30);
+            this.tableSearchTB.TabIndex = 4;
+            // 
+            // viewView
+            // 
+            this.viewView.AutoSize = true;
+            this.viewView.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.viewView.ForeColor = System.Drawing.Color.OrangeRed;
+            this.viewView.Location = new System.Drawing.Point(42, 410);
+            this.viewView.Name = "viewView";
+            this.viewView.Size = new System.Drawing.Size(68, 25);
+            this.viewView.TabIndex = 3;
+            this.viewView.Text = "VIEW";
+            // 
+            // tableView
+            // 
+            this.tableView.AutoSize = true;
+            this.tableView.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tableView.ForeColor = System.Drawing.Color.OrangeRed;
+            this.tableView.Location = new System.Drawing.Point(29, 25);
+            this.tableView.Name = "tableView";
+            this.tableView.Size = new System.Drawing.Size(81, 25);
+            this.tableView.TabIndex = 2;
+            this.tableView.Text = "TABLE";
+            // 
+            // ViewDG
+            // 
+            this.ViewDG.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ViewDG.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ViewDG.Location = new System.Drawing.Point(34, 454);
+            this.ViewDG.Name = "ViewDG";
+            this.ViewDG.Size = new System.Drawing.Size(1178, 334);
+            this.ViewDG.TabIndex = 1;
+            // 
+            // TableDG
+            // 
+            this.TableDG.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.TableDG.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TableDG.Location = new System.Drawing.Point(34, 67);
+            this.TableDG.Name = "TableDG";
+            this.TableDG.Size = new System.Drawing.Size(1178, 325);
+            this.TableDG.TabIndex = 0;
+            // 
+            // AuditViewPoliGD
+            // 
+            this.AuditViewPoliGD.AllowUserToAddRows = false;
+            this.AuditViewPoliGD.AllowUserToDeleteRows = false;
+            this.AuditViewPoliGD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.AuditViewPoliGD.Location = new System.Drawing.Point(19, 328);
+            this.AuditViewPoliGD.Name = "AuditViewPoliGD";
+            this.AuditViewPoliGD.ReadOnly = true;
+            this.AuditViewPoliGD.Size = new System.Drawing.Size(1138, 224);
+            this.AuditViewPoliGD.TabIndex = 41;
+            // 
             // QuanLyBenhVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1443,6 +1597,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.AuditGD)).EndInit();
             this.AuditGB.ResumeLayout(false);
             this.AuditGB.PerformLayout();
+            this.Table_View.ResumeLayout(false);
+            this.Table_View.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ViewDG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TableDG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AuditViewPoliGD)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1551,6 +1710,16 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button TurnOffAuditTableB;
         private System.Windows.Forms.Button TurnOffAuditUserB;
+        private System.Windows.Forms.TabPage Table_View;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button searchTableB;
+        private System.Windows.Forms.TextBox viewSearchTB;
+        private System.Windows.Forms.TextBox tableSearchTB;
+        private System.Windows.Forms.Label viewView;
+        private System.Windows.Forms.Label tableView;
+        private System.Windows.Forms.DataGridView ViewDG;
+        private System.Windows.Forms.DataGridView TableDG;
+        private DataGridView AuditViewPoliGD;
     }
 }
 
